@@ -42,7 +42,10 @@ void CFactsProtoWriter::AddFacts(const CTextProcessor& pText, const Stroka& url,
 {
     const CFactsCollection& factsCollection = pText.GetFactsCollection();
     if (factsCollection.GetFactsCount() == 0)
+    {
+        WriteEmptyResult(Output);
         return;
+    }
 
     NFactex::TDocument& doc = *Documents.Add();
 
@@ -379,12 +382,23 @@ void CFactsProtoWriter::WriteEqualFactsPair(NFactex::TDocument& doc, int iFact1,
     pair.SetSimilarityType(static_cast<NFactex::TSimilarFactPair::ESimilarityType>(FactEntryEqualityType));
 }
 
+void CFactsProtoWriter::WriteEmptyResult(TOutputStream* out)
+{
+    if (OutputMode == PROTOBUF)
+        return;
+    char empty[2] = {'[',']'};
+    out->Write(empty,2);
+    out->Flush();
+}
+
 void CFactsProtoWriter::Flush(TOutputStream* out)
 {
     if (OutputMode == PROTOBUF)
         SerializeAsProtobuf(out);
     else
         SerializeAsJson(out);
+
+    out->Flush();
 
     // print protobuf formatted facts to stdout for debugging
     if (CGramInfo::s_bDebugProtobuf)
