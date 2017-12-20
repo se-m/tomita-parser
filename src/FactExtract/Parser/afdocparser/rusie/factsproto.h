@@ -88,7 +88,7 @@ private:
     void WriteEqualFacts(NFactex::TDocument& doc, const CTextProcessor& pText);
     void WriteLeads(NFactex::TDocument& doc, const CTextProcessor& pText, CLeadGenerator& leadGenerator);
     void WriteFoundLinks(NFactex::TDocument& doc, const CTextProcessor& pText, const SKWDumpOptions& task);
-
+    void WriteEmptyResult(TOutputStream* out);
 
     void SerializeAsProtobuf(TOutputStream* out);
     void SerializeAsJson(TOutputStream* out);
